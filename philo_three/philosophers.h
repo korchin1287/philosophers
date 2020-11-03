@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 18:13:49 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:00:34 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct		s_philo
 {
 	pthread_t		id;
 	pid_t			pid;
+	int				done;
 	int				index;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -33,7 +34,6 @@ typedef struct		s_philo
 	int				must_eat_count;
 	int				ret;
 	size_t			time_to_die;
-//	struct s_data	*data;
 	struct timeval	start_time;
 	struct timeval	time_last_eat;
 	struct timeval	now_time;
@@ -51,6 +51,7 @@ typedef struct		s_data
 	t_philo			*philo;
 	sem_t			*sema;
 	sem_t			*sema2;
+	sem_t			*sema3;
 	struct timeval	start_time;
 }					t_data;
 

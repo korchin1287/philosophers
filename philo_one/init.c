@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:01:57 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 18:56:21 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:01:44 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			init(t_data *data, int argc, char **argv)
 			return (1);
 	}
 	if (data->must_eat_count == -1)
-			data->must_eat_count = 0;
+		data->must_eat_count = 0;
 	if (data->num_filo < 2 || data->time_to_die < 0 || data->time_to_eat < 0 ||
 		data->time_to_sleep < 0 || data->must_eat_count < 0)
 		return (1);

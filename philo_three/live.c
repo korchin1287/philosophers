@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:29:39 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 18:07:07 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:34:27 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ static int		check_dead(t_data *data)
 
 	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
 		return (1);
-	time = (size_t)(((data->philo[data->i].now_time.tv_sec - data->philo[data->i].time_last_eat.tv_sec)
-		* 1000) + ((data->philo[data->i].now_time.tv_usec - data->philo[data->i].time_last_eat.tv_usec)
-		/ 1000));
+	time = (size_t)(((data->philo[data->i].now_time.tv_sec -
+		data->philo[data->i].time_last_eat.tv_sec)
+		* 1000) + ((data->philo[data->i].now_time.tv_usec -
+			data->philo[data->i].time_last_eat.tv_usec) / 1000));
 	if (time > data->philo[data->i].time_to_die)
 	{
 		print_status(data, 4);
@@ -45,15 +46,16 @@ static int		eating(t_data *data)
 		return (3);
 	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
 		return (3);
-	if (ft_sleep(data->philo[data->i].time_to_eat, data->philo[data->i].now_time))
+	if (ft_sleep(data->philo[data->i].time_to_eat,
+		data->philo[data->i].now_time))
 		return (3);
 	if (sem_post(data->sema) == -1)
 		return (2);
 	if (sem_post(data->sema) == -1)
 		return (2);
-	data->philo[data->i].eat_count++;
-	if ((data->philo[data->i].eat_count) == data->philo[data->i].must_eat_count)
-		exit(1);
+	if (++(data->philo[data->i].eat_count) ==
+		data->philo[data->i].must_eat_count)
+		exit(69);
 	return (0);
 }
 
@@ -63,14 +65,15 @@ static int		sleeping(t_data *data)
 		return (1);
 	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
 		return (1);
-	if (ft_sleep(data->philo[data->i].time_to_sleep, data->philo[data->i].now_time))
+	if (ft_sleep(data->philo[data->i].time_to_sleep,
+		data->philo[data->i].now_time))
 		return (1);
 	return (0);
 }
 
 void			*live(void *data_v)
 {
-	t_data *data;
+	t_data	*data;
 
 	data = (t_data*)data_v;
 	while (1)
@@ -78,10 +81,9 @@ void			*live(void *data_v)
 		if ((data->philo[data->i].ret = eating(data)))
 			break ;
 		if (sleeping(data))
-			break ; 
+			break ;
 		if (print_status(data, 5))
 			break ;
 	}
-	//return ((void*)0);
-	exit(0);
+	exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:01:57 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 18:56:34 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:02:27 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			init(t_data *data, int argc, char **argv)
 			return (1);
 	}
 	if (data->must_eat_count == -1)
-			data->must_eat_count = 0;
+		data->must_eat_count = 0;
 	if (data->num_filo < 2 || data->time_to_die < 0 || data->time_to_eat < 0 ||
 		data->time_to_sleep < 0 || data->must_eat_count < 0)
 		return (1);
@@ -61,11 +61,11 @@ int			init(t_data *data, int argc, char **argv)
 	init_philos(data);
 	sem_unlink("name");
 	data->sema = sem_open("name", O_CREAT, 0666, data->num_filo);
-	if(data->sema == SEM_FAILED)
+	if (data->sema == SEM_FAILED)
 		return (1);
 	sem_unlink("name2");
 	data->sema2 = sem_open("name2", O_CREAT, 0666, 1);
-	if(data->sema2 == SEM_FAILED)
+	if (data->sema2 == SEM_FAILED)
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 18:10:42 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:33:52 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,28 @@ int			ft_sleep(long long need_time, struct timeval last_time)
 
 static int	check_live(t_data *data)
 {
-	waitpid(-1, &data->status, 0);
-	kill_all(data);
-	clear_data(data);
+	int	i;
+	int	count;
+
+	while (1)
+	{
+		i = -1;
+		count = 0;
+		while (++i < data->num_filo)
+		{
+			if (waitpid(data->philo[i].pid, &data->status, 0))
+				count++;
+			data->status = WEXITSTATUS(data->status);
+			if (data->status != 69)
+				return (kill_all(data) && clear_data(data));
+		}
+		if (count == data->num_filo)
+		{
+			kill_all(data);
+			clear_data(data);
+			break ;
+		}
+	}
 	return (0);
 }
 
@@ -55,21 +74,17 @@ static int	start_live(t_data *data)
 			return (data->i);
 		data->philo[data->i].pid = fork();
 		if (data->philo[data->i].pid == 0)
-		{
 			live(data);
-			exit (1);
-		}
 		else if (data->philo[data->i].pid < 0)
 			return (1);
 	}
-			return (check_live(data));
+	return (0);
 }
 
 int			main(int argc, char **argv)
 {
 	t_data	data;
-	
-	memset(&data, 0, sizeof(t_data));
+
 	if (argc < 5 || argc > 6)
 		return (exit_str("Error: bad argument\n"));
 	if (init(&data, argc, argv))
@@ -82,6 +97,5 @@ int			main(int argc, char **argv)
 		return (kill_all(&data) && clear_data(&data) &&
 			exit_str("Error: bad live of philosophers\n"));
 	}
-//	check_live(&data);
-	return (0);
+	return (check_live(&data));
 }
