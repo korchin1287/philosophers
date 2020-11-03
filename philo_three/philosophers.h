@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 16:17:55 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:13:49 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,13 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
-# include <sys/types.h>
-# include <signal.h>
-# include <sys/wait.h>
 # include <semaphore.h>
+# include <signal.h>
 
 typedef struct		s_philo
 {
+	pthread_t		id;
 	pid_t			pid;
-	pid_t			wpid;
 	int				index;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -35,7 +33,7 @@ typedef struct		s_philo
 	int				must_eat_count;
 	int				ret;
 	size_t			time_to_die;
-	struct s_data	*data;
+//	struct s_data	*data;
 	struct timeval	start_time;
 	struct timeval	time_last_eat;
 	struct timeval	now_time;
@@ -43,6 +41,7 @@ typedef struct		s_philo
 
 typedef struct		s_data
 {
+	int				i;
 	int				num_filo;
 	int				time_to_die;
 	int				time_to_eat;
@@ -56,19 +55,19 @@ typedef struct		s_data
 }					t_data;
 
 int					main(int argc, char **argv);
+int		kill_all(t_data *data);
 int					init(t_data *data, int argc, char **argv);
 int					exit_str(char *str);
-int					kill_all(t_data *data);
 int					clear_data(t_data *data);
 int					ft_atoi(const char *str);
 int					ft_atoi(const char *str);
 int					ft_sleep(long long need_time, struct timeval last_time);
 int					ft_strlen(const char *str);
 int					str_error(int ret);
+int					print_status(t_data *data, int i);
 void				*live(void *philo_v);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putnbr_fd(int nb, int fd);
 void				ft_putchar_fd(char c, int fd);
-void				print_status(t_philo *philo, int i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:29:39 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 18:02:58 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/02 19:56:45 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,35 @@ static int		eating(t_philo *philo)
 		return (2);
 	if (sem_wait(philo->data->sema) == -1)
 		return (2);
+	if (print_status(philo, 1) || print_status(philo, 1))
+		return (2);
 	if (check_dead(philo))
 		return (4);
-	print_status(philo, 1);
-	print_status(philo, 1);
 	if (gettimeofday(&philo->time_last_eat, NULL) == -1)
-		return (1);
-	print_status(philo, 2);
+		return (3);
+	if (print_status(philo, 2))
+		return (3);
 	if (gettimeofday(&philo->now_time, NULL) == -1)
-		return (1);
-	ft_sleep(philo->time_to_eat, philo->now_time);
+		return (3);
+	if (ft_sleep(philo->time_to_eat, philo->now_time))
+		return (3);
 	if (sem_post(philo->data->sema) == -1)
 		return (2);
 	if (sem_post(philo->data->sema) == -1)
 		return (2);
 	if (++(philo->eat_count) == philo->must_eat_count)
-		return (3);
-	return (0);
+		philo->done = 1;
+	return (philo->done);
 }
 
 static int		sleeping(t_philo *philo)
 {
-	print_status(philo, 3);
+	if (print_status(philo, 3))
+		return (1);
 	if (gettimeofday(&philo->now_time, NULL) == -1)
 		return (1);
-	ft_sleep(philo->time_to_sleep, philo->now_time);
+	if (ft_sleep(philo->time_to_sleep, philo->now_time))
+		return (1);
 	return (0);
 }
 
@@ -72,8 +76,10 @@ void			*live(void *philo_v)
 	{
 		if ((philo->ret = eating(philo)))
 			break ;
-		sleeping(philo);
-		print_status(philo, 5);
+		if (sleeping(philo))
+			break ;
+		if (print_status(philo, 5))
+			break ;
 	}
 	return ((void*)0);
 }

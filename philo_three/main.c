@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 18:03:11 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:10:42 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,50 +35,41 @@ int			ft_sleep(long long need_time, struct timeval last_time)
 	return (0);
 }
 
-static int	start_live(t_data *data)
+static int	check_live(t_data *data)
 {
-	int		i;
-
-	i = 0;
-	if (gettimeofday(&(data->start_time), NULL) == -1)
-		return (1);
-	while (i < data->num_filo)
-	{
-		data->philo[i].start_time = data->start_time;
-		if (gettimeofday(&data->philo[i].time_last_eat, NULL) == -1)
-			return (1);
-		data->philo[i].pid = fork();
-		if (data->philo[i].pid == 0)
-			live(&data->philo[i]);
-		if (data->philo[i].pid < 0)
-			kill_all(data);
-		i++;
-	}
-	
+	waitpid(-1, &data->status, 0);
+	kill_all(data);
+	clear_data(data);
 	return (0);
 }
 
-static int	check_live(t_data *data)
+static int	start_live(t_data *data)
 {
-	int	i;
-
-	while (1)
+	data->i = -1;
+	if (gettimeofday(&(data->start_time), NULL) == -1)
+		return (1);
+	while (++(data->i) < data->num_filo)
 	{
-		i = 0;
-		while (i < data->num_filo)
+		data->philo[data->i].start_time = data->start_time;
+		if (gettimeofday(&data->philo[data->i].time_last_eat, NULL) == -1)
+			return (data->i);
+		data->philo[data->i].pid = fork();
+		if (data->philo[data->i].pid == 0)
 		{
-			if (data->philo[i].wpid == waitpid(data->philo[i].pid, &data->status, WUNTRACED))
-				return (kill_all(data));
-			i++;
+			live(data);
+			exit (1);
 		}
+		else if (data->philo[data->i].pid < 0)
+			return (1);
 	}
-	return (0);
+			return (check_live(data));
 }
 
 int			main(int argc, char **argv)
 {
 	t_data	data;
-
+	
+	memset(&data, 0, sizeof(t_data));
 	if (argc < 5 || argc > 6)
 		return (exit_str("Error: bad argument\n"));
 	if (init(&data, argc, argv))
@@ -88,10 +79,9 @@ int			main(int argc, char **argv)
 	}
 	if (start_live(&data))
 	{
-		return (clear_data(&data) &&
+		return (kill_all(&data) && clear_data(&data) &&
 			exit_str("Error: bad live of philosophers\n"));
 	}
-	if (check_live(&data))
-		return (clear_data(&data));
+//	check_live(&data);
 	return (0);
 }

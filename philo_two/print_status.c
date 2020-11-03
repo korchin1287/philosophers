@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 16:34:33 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 15:43:35 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/02 19:51:57 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,14 @@ void	print_status_help(int i)
 		write(1, " is thinking\n", 14);
 }
 
-void	print_status(t_philo *philo, int i)
+int		print_status(t_philo *philo, int i)
 {
 	size_t	time;
 
 	if (sem_wait(philo->data->sema2))
-		return ;
+		return (1);
 	if (gettimeofday(&philo->now_time, NULL) == -1)
-	{
-		philo->ret = 1;
-		return ;
-	}
+		return (1);
 	time = (size_t)(((philo->now_time.tv_sec - philo->start_time.tv_sec) *
 		1000) + ((philo->now_time.tv_usec - philo->start_time.tv_usec) / 1000));
 	ft_putnbr_fd(time, 1);
@@ -53,5 +50,6 @@ void	print_status(t_philo *philo, int i)
 	ft_putnbr_fd(philo->index, 1);
 	print_status_help(i);
 	if (sem_post(philo->data->sema2))
-		return ;
+		return (1);
+	return (0);
 }

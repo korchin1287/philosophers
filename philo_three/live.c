@@ -6,74 +6,82 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:29:39 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 18:03:13 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:07:07 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static int		check_dead(t_philo *philo)
+static int		check_dead(t_data *data)
 {
 	size_t	time;
 
-	if (gettimeofday(&philo->now_time, NULL) == -1)
+	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
 		return (1);
-	time = (size_t)(((philo->now_time.tv_sec - philo->time_last_eat.tv_sec)
-		* 1000) + ((philo->now_time.tv_usec - philo->time_last_eat.tv_usec)
+	time = (size_t)(((data->philo[data->i].now_time.tv_sec - data->philo[data->i].time_last_eat.tv_sec)
+		* 1000) + ((data->philo[data->i].now_time.tv_usec - data->philo[data->i].time_last_eat.tv_usec)
 		/ 1000));
-	if (time > philo->time_to_die)
+	if (time > data->philo[data->i].time_to_die)
 	{
-		print_status(philo, 4);
+		print_status(data, 4);
 		return (1);
 	}
 	return (0);
 }
 
-static int		eating(t_philo *philo)
+static int		eating(t_data *data)
 {
-	if (sem_wait(philo->data->sema) == -1)
+	if (sem_wait(data->sema) == -1)
 		return (2);
-	if (sem_wait(philo->data->sema) == -1)
+	if (sem_wait(data->sema) == -1)
 		return (2);
-	if (check_dead(philo))
+	if (print_status(data, 1) || print_status(data, 1))
+		return (2);
+	if (check_dead(data))
 		return (4);
-	print_status(philo, 1);
-	print_status(philo, 1);
-	if (gettimeofday(&philo->time_last_eat, NULL) == -1)
-		return (1);
-	print_status(philo, 2);
-	if (gettimeofday(&philo->now_time, NULL) == -1)
-		return (1);
-	ft_sleep(philo->time_to_eat, philo->now_time);
-	if (sem_post(philo->data->sema) == -1)
-		return (2);
-	if (sem_post(philo->data->sema) == -1)
-		return (2);
-	if (++(philo->eat_count) == philo->must_eat_count)
+	if (gettimeofday(&data->philo[data->i].time_last_eat, NULL) == -1)
 		return (3);
+	if (print_status(data, 2))
+		return (3);
+	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
+		return (3);
+	if (ft_sleep(data->philo[data->i].time_to_eat, data->philo[data->i].now_time))
+		return (3);
+	if (sem_post(data->sema) == -1)
+		return (2);
+	if (sem_post(data->sema) == -1)
+		return (2);
+	data->philo[data->i].eat_count++;
+	if ((data->philo[data->i].eat_count) == data->philo[data->i].must_eat_count)
+		exit(1);
 	return (0);
 }
 
-static int		sleeping(t_philo *philo)
+static int		sleeping(t_data *data)
 {
-	print_status(philo, 3);
-	if (gettimeofday(&philo->now_time, NULL) == -1)
+	if (print_status(data, 3))
 		return (1);
-	ft_sleep(philo->time_to_sleep, philo->now_time);
+	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
+		return (1);
+	if (ft_sleep(data->philo[data->i].time_to_sleep, data->philo[data->i].now_time))
+		return (1);
 	return (0);
 }
 
-void			*live(void *philo_v)
+void			*live(void *data_v)
 {
-	t_philo *philo;
+	t_data *data;
 
-	philo = (t_philo*)philo_v;
+	data = (t_data*)data_v;
 	while (1)
 	{
-		if ((philo->ret = eating(philo)))
+		if ((data->philo[data->i].ret = eating(data)))
 			break ;
-		sleeping(philo);
-		print_status(philo, 5);
+		if (sleeping(data))
+			break ; 
+		if (print_status(data, 5))
+			break ;
 	}
-	return ((void*)0);
+	//return ((void*)0);
+	exit(0);
 }

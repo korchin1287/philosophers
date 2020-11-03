@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 16:01:45 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/02 19:53:52 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static int	start_live(t_data *data)
 			!= 0)
 			return (1);
 		i++;
+		usleep(30);
 	}
 	return (0);
 }
@@ -58,16 +59,22 @@ static int	start_live(t_data *data)
 static int	check_live(t_data *data)
 {
 	int	i;
+	int count;
 
 	while (1)
 	{
 		i = 0;
+		count = 0;
 		while (i < data->num_filo)
 		{
-			if (data->philo[i].ret)
-				return (str_error(data->philo[i].ret));
+			if (data->philo[i].done)
+				count++;
+			if (data->philo[i].ret > 1)
+				return (clear_data(data) && str_error(data->philo[i].ret));
 			i++;
 		}
+		if (count == data->num_filo)
+			return (clear_data(data));
 	}
 	return (0);
 }
@@ -88,7 +95,6 @@ int			main(int argc, char **argv)
 		return (clear_data(&data) &&
 			exit_str("Error: bad live of philosophers\n"));
 	}
-	if (check_live(&data))
-		return (clear_data(&data));
+	check_live(&data);
 	return (0);
 }

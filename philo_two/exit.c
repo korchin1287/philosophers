@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:00:51 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 15:43:45 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/02 17:46:31 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int		clear_data(t_data *data)
 	i = 0;
 	if (data->philo)
 	{
-		sem_close(data->sema);
-		sem_close(data->sema2);
 		sem_unlink("name");
 		sem_unlink("name2");
 		free(data->philo);

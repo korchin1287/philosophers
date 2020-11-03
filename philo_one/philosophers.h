@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/01 18:26:20 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/02 19:46:12 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct		s_philo
 {
 	pthread_t		id;
 	int				index;
+	int				done;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				eat_count;
@@ -60,10 +61,10 @@ int					ft_atoi(const char *str);
 int					ft_sleep(long long need_time, struct timeval last_time);
 int					ft_strlen(const char *str);
 int					str_error(int ret);
+int					print_status(t_philo *philo, int i);
 void				*live(void *philo_v);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putnbr_fd(int nb, int fd);
 void				ft_putchar_fd(char c, int fd);
-void				print_status(t_philo *philo, int i);
 
 #endif
