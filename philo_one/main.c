@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/02 19:45:38 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/04 17:02:55 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int			ft_sleep(long long need_time, struct timeval last_time)
 
 	time = change_time(last_time) + (long long)need_time;
 	if (gettimeofday(&now_time, NULL) == -1)
-		return (1);
+		return (3);
 	while ((change_time(now_time) <= time))
 	{
 		if (usleep(100) == -1)
-			return (1);
+			return (3);
 		if (gettimeofday(&now_time, NULL) == -1)
-			return (1);
+			return (3);
 	}
 	return (0);
 }
@@ -41,12 +41,12 @@ static int	start_live(t_data *data)
 
 	i = 0;
 	if (gettimeofday(&(data->start_time), NULL) == -1)
-		return (1);
+		return (3);
 	while (i < data->num_filo)
 	{
 		data->philo[i].start_time = data->start_time;
 		if (gettimeofday(&data->philo[i].time_last_eat, NULL) == -1)
-			return (1);
+			return (3);
 		if ((pthread_create(&data->philo[i].id, NULL, &live, &data->philo[i]))
 			!= 0)
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/02 19:51:29 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/06 15:05:03 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct		s_philo
 
 typedef struct		s_data
 {
+	int				dead;
 	int				num_filo;
 	int				time_to_die;
 	int				time_to_eat;

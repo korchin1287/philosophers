@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:00:51 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/02 17:46:31 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/04 17:06:18 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int		str_error(int ret)
 {
-	if (ret == 1)
+	if (ret == 3)
 		ft_putstr_fd("Error: bad get time\n", 2);
 	else if (ret == 2)
-		ft_putstr_fd("Error: bad semaphore\n", 2);
+		ft_putstr_fd("Error: bad mutex or semaphore\n", 2);
+	else if (ret == 4)
+		ft_putstr_fd("Error: bad print\n", 2);
 	return (1);
 }
 

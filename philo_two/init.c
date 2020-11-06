@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:01:57 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 19:02:27 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/06 15:05:11 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	init_data(t_data *data, char **argv)
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->must_eat_count = -1;
+	data->dead = 0;
 }
 
 static void	init_philos(t_data *data)

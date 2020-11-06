@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 20:33:52 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/04 19:55:10 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	check_live(t_data *data)
 		count = 0;
 		while (++i < data->num_filo)
 		{
-			if (waitpid(data->philo[i].pid, &data->status, 0))
+			if (waitpid(-1, &data->status, 0))
 				count++;
 			data->status = WEXITSTATUS(data->status);
 			if (data->status != 69)

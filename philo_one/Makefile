@@ -4,7 +4,7 @@ SRCS = main.c init.c exit.c utils.c print_status.c live.c
 OBJ = $(SRCS:.c=.o)
 
 INCLUDES = ./
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME):$(OBJ)

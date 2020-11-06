@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/03 20:00:34 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/06 15:07:16 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct		s_philo
 
 typedef struct		s_data
 {
+	int				dead;
 	int				i;
 	int				num_filo;
 	int				time_to_die;
@@ -56,7 +57,8 @@ typedef struct		s_data
 }					t_data;
 
 int					main(int argc, char **argv);
-int		kill_all(t_data *data);
+int					check_dead(t_data *data);
+int					kill_all(t_data *data);
 int					init(t_data *data, int argc, char **argv);
 int					exit_str(char *str);
 int					clear_data(t_data *data);
