@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:31:06 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 14:55:27 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/07 18:35:39 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ void				*live(void *philo_v);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putnbr_fd(int nb, int fd);
 void				ft_putchar_fd(char c, int fd);
+void				*check_dead(void *philo_v);
 
 #endif

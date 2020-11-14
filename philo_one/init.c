@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:01:57 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 14:55:46 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/09 17:02:50 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,13 @@ static void	init_philos(t_data *data)
 		data->philo[i].time_to_sleep = data->time_to_sleep;
 		data->philo[i].must_eat_count = data->must_eat_count;
 		data->philo[i].data = data;
+		
 		data->philo[i].l_hand = data->forks[i];
 		if ((i + 1) != data->num_filo)
 			data->philo[i].r_hand = data->forks[i + 1];
 		else
 			data->philo[i].r_hand = data->forks[0];
+			
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 16:34:33 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 15:03:43 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/07 19:28:56 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ int		print_status(t_philo *philo, int i)
 	if (pthread_mutex_lock(&philo->data->print))
 		return (2);
 	if (philo->data->dead)
-	{
 		return (1);
-	}
 	if (gettimeofday(&philo->now_time, NULL) == -1)
 		return (3);
 	time = (size_t)(((philo->now_time.tv_sec - philo->start_time.tv_sec) *

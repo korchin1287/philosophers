@@ -6,29 +6,36 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:29:39 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 15:11:21 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/14 15:29:06 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int				check_dead(t_data *data)
+void			*check_dead(void *data_v)
 {
-	size_t	time;
+	size_t			time;
+	t_data			*data;
+	struct timeval	now_time;
 
-	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
-		return (1);
-	time = (size_t)(((data->philo[data->i].now_time.tv_sec -
-		data->philo[data->i].time_last_eat.tv_sec)
-		* 1000) + ((data->philo[data->i].now_time.tv_usec -
-			data->philo[data->i].time_last_eat.tv_usec) / 1000));
-	if (time > data->philo[data->i].time_to_die)
+	data = (t_data*)data_v;
+	while (1)
 	{
-		print_status(data, 4);
-		data->dead = 1;
-		return (1);
+		if ((gettimeofday(&now_time, NULL)) == -1)
+			break ;
+		usleep(50);
+		time = (size_t)((now_time.tv_sec -
+			data->philo[data->i].time_last_eat.tv_sec) * 1000 +
+			(now_time.tv_usec - data->philo[data->i].time_last_eat.tv_usec)
+			/ 1000);
+		if (time > data->philo[data->i].time_to_die)
+		{
+			print_status(data, 4);
+			data->dead = 1;
+			exit(1);
+		}
 	}
-	return (0);
+	return ((void*)0);
 }
 
 static int		eating(t_data *data)
@@ -39,8 +46,6 @@ static int		eating(t_data *data)
 		return (2);
 	if (print_status(data, 1) || print_status(data, 1))
 		return (4);
-	if (check_dead(data))
-		return (5);
 	if (gettimeofday(&data->philo[data->i].time_last_eat, NULL) == -1)
 		return (3);
 	if (print_status(data, 2))
@@ -74,10 +79,13 @@ static int		sleeping(t_data *data)
 
 void			*live(void *data_v)
 {
-	t_data	*data;
+	pthread_t	id2;
+	t_data		*data;
 
 	data = (t_data*)data_v;
-	while (1)
+	if ((pthread_create(&id2, NULL, &check_dead, data)) != 0)
+		exit(1);
+	while (data->dead == 0)
 	{
 		if ((data->philo[data->i].ret = eating(data)))
 			break ;

@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/02 19:53:52 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/14 15:28:46 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			ft_sleep(long long need_time, struct timeval last_time)
 		return (1);
 	while ((change_time(now_time) <= time))
 	{
-		if (usleep(100) == -1)
+		if (usleep(50) == -1)
 			return (1);
 		if (gettimeofday(&now_time, NULL) == -1)
 			return (1);

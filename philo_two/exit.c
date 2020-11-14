@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 18:00:51 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/04 17:06:18 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/07 20:41:14 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ int		exit_str(char *str)
 
 int		clear_data(t_data *data)
 {
-	int i;
-
-	i = 0;
 	if (data->philo)
 	{
 		sem_unlink("name");

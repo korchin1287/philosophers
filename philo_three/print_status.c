@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 16:34:33 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 15:07:54 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/07 20:32:56 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int		print_status(t_data *data, int i)
 {
 	size_t	time;
 
+	if (data->dead)
+		exit(1);
 	if (sem_wait(data->sema2))
 		return (2);
-	if (data->dead)
-		return (1);
 	if (gettimeofday(&data->philo[data->i].now_time, NULL) == -1)
 		return (2);
 	time = (size_t)(((data->philo[data->i].now_time.tv_sec -

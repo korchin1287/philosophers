@@ -6,7 +6,7 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 15:56:12 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/04 19:55:10 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/07 20:47:11 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,16 @@ int			ft_sleep(long long need_time, struct timeval last_time)
 
 static int	check_live(t_data *data)
 {
-	int	i;
 	int	count;
 
+	count = 0;
 	while (1)
 	{
-		i = -1;
-		count = 0;
-		while (++i < data->num_filo)
-		{
-			if (waitpid(-1, &data->status, 0))
-				count++;
-			data->status = WEXITSTATUS(data->status);
-			if (data->status != 69)
-				return (kill_all(data) && clear_data(data));
-		}
+		if (waitpid(-1, &data->status, 0))
+			count++;
+		data->status = WEXITSTATUS(data->status);
+		if (data->status != 69)
+			return (kill_all(data) && clear_data(data));
 		if (count == data->num_filo)
 		{
 			kill_all(data);
@@ -83,14 +78,19 @@ static int	start_live(t_data *data)
 
 int			main(int argc, char **argv)
 {
+	int		ret;
 	t_data	data;
 
 	if (argc < 5 || argc > 6)
 		return (exit_str("Error: bad argument\n"));
-	if (init(&data, argc, argv))
+	if ((ret = init(&data, argc, argv)))
 	{
-		return (clear_data(&data) &&
-			exit_str("Error: bad argument or bad init\n"));
+		if (ret == 2)
+		{
+			return (clear_data(&data) &&
+				exit_str("Error: bad argument or bad init\n"));
+		}
+		return (exit_str("Error: bad argument or bad init\n"));
 	}
 	if (start_live(&data))
 	{

@@ -6,28 +6,35 @@
 /*   By: nofloren <nofloren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:29:39 by nofloren          #+#    #+#             */
-/*   Updated: 2020/11/06 15:04:09 by nofloren         ###   ########.fr       */
+/*   Updated: 2020/11/14 15:28:52 by nofloren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static int		check_dead(t_philo *philo)
+void			*check_dead(void *philo_v)
 {
-	size_t	time;
+	t_philo			*philo;
+	struct timeval	now_time;
+	size_t			time;
 
-	if (gettimeofday(&philo->now_time, NULL) == -1)
-		return (1);
-	time = (size_t)(((philo->now_time.tv_sec - philo->time_last_eat.tv_sec)
-		* 1000) + ((philo->now_time.tv_usec - philo->time_last_eat.tv_usec)
-		/ 1000));
-	if (time > philo->time_to_die)
+	philo = (t_philo*)philo_v;
+	while (1)
 	{
-		print_status(philo, 4);
-		philo->data->dead = 1;
-		return (1);
+		if (gettimeofday(&now_time, NULL) == -1)
+			break ;
+		usleep(50);
+		time = (size_t)((now_time.tv_sec - philo->time_last_eat.tv_sec) * 1000 +
+			(now_time.tv_usec - philo->time_last_eat.tv_usec) / 1000);
+		if (time > philo->time_to_die)
+		{
+			print_status(philo, 4);
+			philo->data->dead = 1;
+			philo->ret = 5;
+			break ;
+		}
 	}
-	return (0);
+	return ((void*)0);
 }
 
 static int		eating(t_philo *philo)
@@ -40,8 +47,6 @@ static int		eating(t_philo *philo)
 		return (2);
 	if (print_status(philo, 1))
 		return (4);
-	if (check_dead(philo))
-		return (5);
 	if (gettimeofday(&philo->time_last_eat, NULL) == -1)
 		return (3);
 	if (print_status(philo, 2))
@@ -72,10 +77,13 @@ static int		sleeping(t_philo *philo)
 
 void			*live(void *philo_v)
 {
-	t_philo *philo;
+	pthread_t	id2;
+	t_philo		*philo;
 
 	philo = (t_philo*)philo_v;
-	while (1)
+	if ((pthread_create(&id2, NULL, &check_dead, philo)) != 0)
+		return (NULL);
+	while (philo->data->dead == 0)
 	{
 		if ((philo->ret = eating(philo)))
 			break ;
